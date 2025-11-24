@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto IoT - Control de Nivel de Agua en Tanque</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* ====== ESTILOS GENERALES ====== */
+        :root {
+            --color-primario: #05668d;
+            --color-secundario: #02c39a;
+            --color-fondo: #f5f7fb;
+            --color-texto: #222;
+            --color-blanco: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--color-primario);
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .contenedor {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem;
+        }
+
+        /* ====== CABECERA Y MENÚ ====== */
+        header {
+            background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+            color: var(--color-blanco);
+            padding: 1.5rem 0 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitulo {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        nav {
+            margin-top: 0.8rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.7rem;
+            padding: 0 0.5rem 0.8rem;
+        }
+
+        nav a {
+            color: var(--color-blanco);
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 0.3rem 0.6rem;
+            border-radius: 999px;
+        }
+
+        nav a:hover {
+            background-color: rgba(255,255,255,0.15);
+        }
+
+        /* ====== SECCIONES ====== */
+        section {
+            background-color: var(--color-blanco);
+            margin-bottom: 1.2rem;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        section h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.6rem;
+            color: var(--color-primario);
+            border-left: 4px solid var(--color-secundario);
+            padding-left: 0.5rem;
+        }
+
+        section p {
+            margin-bottom: 0.5rem;
+            text-align: justify;
+        }
+
+        ul {
+            margin-left: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ====== TARJETAS Y GRID ====== */
+        .grid-dos-columnas {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1rem;
+        }
+
+        .tarjeta {
+            background-color: #f8fafc;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .tarjeta strong {
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ====== GALERÍA DE IMÁGENES (DIAGRAMAS) ====== */
+        .galeria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 4fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        figure {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        figure figcaption {
+            margin-top: 0.4rem;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .placeholder-diagrama {
+            height: 140px;
+            border-radius: 6px;
+            border: 2px dashed #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .imagen-scroll {
+    width: 100%;
+    height: 300px;          
+    overflow: auto;        
+    border: 2px dashed #cbd5e1;
+    border-radius: 6px;
+    padding: 115px;
+    background: #f9fafb;
+}
+
+.imagen-scroll img {
+    width: auto;          
+    max-width: none;       
+    height: auto;
+}
+
+
+        form {
+            display: grid;
+            gap: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        input[type="submit"] {
+            background-color: var(--color-primario);
+            color: var(--color-blanco);
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            justify-self: start;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #024c69;
+        }
+
+     
+        .lista-enlaces li {
+            margin-bottom: 0.3rem;
+        }
+
+     
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #64748b;
+            padding: 0.8rem 0 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-dos-columnas {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.3rem;
+            }
+
+            nav ul {
+                gap: 0.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="contenedor">
+        <h1>Sistema IoT de Control de Nivel de Agua en Tanque</h1>
+        <p class="subtitulo"><strong>Carrera:</strong> Ingeniería en Software</p>
+        <p class="subtitulo"><strong>Asignatura:</strong> Sistema de información con tecnologias emergentes</p>
+        <p class="subtitulo"><strong>Estudiante:</strong> Erick Alexander Andrango Toaquiza</p>
+
+        <nav>
+            <ul>
+                <li><a href="#problema">Problema</a></li>
+                <li><a href="#solucion">Solución</a></li>
+                <li><a href="#funcionamiento">Funcionamiento</a></li>
+                <li><a href="#tecnologias">Tecnologías e impacto</a></li>
+                <li><a href="#imagenes">Imágenes</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#enlaces">Enlaces</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <!-- DESCRIPCIÓN DEL PROBLEMA -->
+    <section id="problema">
+        <h2>Descripción del problema</h2>
+        <p>
+            En muchas viviendas, edificios y pequeñas industrias, el control del nivel de agua en los tanques 
+            se realiza de forma manual. Esto provoca desperdicio de agua, daños en las bombas por funcionamiento en seco 
+            y falta de información en tiempo real sobre el estado del tanque.
+        </p>
+        <p>
+            La ausencia de un sistema automatizado genera:
+        </p>
+        <ul>
+            <li>Riesgo de quedarse sin agua en momentos críticos.</li>
+            <li>Desperdicio de recursos por reboses constantes.</li>
+            <li>Mayor consumo eléctrico por encendido y apagado manual de bombas.</li>
+        </ul>
+    </section>
+
+    <!-- EXPLICACIÓN DE LA SOLUCIÓN -->
+    <section id="solucion">
+        <h2>Explicación de la solución</h2>
+        <div class="grid-dos-columnas">
+            <div>
+                <p>
+                    La solución propuesta es un <strong>sistema IoT de monitoreo de nivel de agua</strong> que integra
+                    sensores de nivel, una placa microcontroladora y una plataforma en la nube para registrar y visualizar 
+                    los datos en tiempo real.
+                </p>
+                <p>
+                    El sistema envía notificaciones cuando el tanque está por vaciarse o por rebosar, permitiendo tomar 
+                    decisiones rápidas y automatizar el encendido de la bomba de agua.
+                </p>
+            </div>
+            <div class="tarjeta">
+                <strong>Objetivos principales:</strong>
+                <ul>
+                    <li>Monitorear el nivel de agua de forma continua.</li>
+                    <li>Reducir el desperdicio de agua y energía.</li>
+                    <li>Informar al usuario mediante alertas (por ejemplo, correo o app).</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FUNCIONAMIENTO -->
+    <section id="funcionamiento">
+        <h2>El funcionamiento del sistema</h2>
+        <p>
+            El sistema se compone de un tanque de agua con sensores de nivel, una placa controladora (por ejemplo, 
+            Arduino o ESP32) y un módulo de conectividad a Internet.
+        </p>
+        <ol>
+            <li>Los sensores detectan el nivel actual de agua (bajo, medio, alto).</li>
+            <li>La placa lee los datos y los envía a la nube mediante Wi-Fi.</li>
+            <li>En la plataforma en la nube se almacenan los datos y se muestran en gráficos.</li>
+            <li>Cuando el nivel es muy bajo o muy alto, se genera una alerta para el usuario.</li>
+            <li>Opcionalmente, el sistema puede encender o apagar la bomba de forma automática.</li>
+        </ol>
+    </section>
+
+    <!-- TECNOLOGÍAS E IMPACTO -->
+    <section id="tecnologias">
+        <h2>Tecnologías utilizadas e impacto</h2>
+        <div class="grid-dos-columnas">
+            <div>
+                <h3>Tecnologías utilizadas</h3>
+                <ul>
+                    <li><strong>Placa microcontroladora:</strong> Arduino / ESP32.</li>
+                    <li><strong>Sensores de nivel:</strong> flotadores o sensores ultrasónicos.</li>
+                    <li><strong>Conectividad:</strong> Wi-Fi para enviar datos a la nube.</li>
+                    <li><strong>Plataforma en la nube:</strong> base de datos y panel web de monitoreo.</li>
+                    <li><strong>Interfaz web:</strong> página informativa para el usuario (HTML y CSS).</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Impacto</h3>
+                <div class="tarjeta">
+                    <ul>
+                        <li>Uso más eficiente del agua.</li>
+                        <li>Disminución de daños en la bomba.</li>
+                        <li>Mayor comodidad para el usuario.</li>
+                        <li>Posibilidad de escalar a edificios, conjuntos residenciales o industrias.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMÁGENES / DIAGRAMAS -->
+    <section id="imagenes">
+        <h2>Imágenes </h2>
+        <div class="galeria">
+           <figure>
+    <div class="imagen-scroll">
+        <img src="https://laelectronica.com.gt/image/catalog/Blog/NIVEL%20DE%20AGUA/Circuito.jpg" 
+             alt="Diagrama del sistema IoT">
+    </div>
+    <figcaption>Esquema del tanque.</figcaption>
+</figure>
+
+
+           <figure>
+    <div class="imagen-scroll">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9n_2jCbi0GXOyyjNf3jPEY9PF117LcPQoxg&s" 
+             alt="Diagrama del sistema IoT">
+    </div>
+    <figcaption>Diagrama sistema LoT.</figcaption>
+</figure>
+
+        </div>
+    </section>
+
+    <!-- FORMULARIO DE CONTACTO -->
+    <section id="contacto">
+        <h2>Formulario de contacto</h2>
+        <p>
+            Si deseas más información sobre este proyecto o tienes sugerencias, puedes completar el siguiente formulario:
+        </p>
+        <!-- Puedes cambiar el mailto por tu correo institucional -->
+        <form action="mailto:erick.andrango@uisek.edu.ec" method="post">
+            <div>
+                <label for="nombre">Nombre completo:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+            </div>
+            <div>
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" name="correo" placeholder="tucorreo@ejemplo.com" required>
+            </div>
+            <div>
+                <label for="mensaje">Mensaje:</label>
+                <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+            </div>
+            <input type="submit" value="Enviar mensaje">
+        </form>
+    </section>
+
+    <!-- ENLACES COMPLEMENTARIOS -->
+    <section id="enlaces">
+        <h2>Enlaces a video e información complementaria</h2>
+        <ul class="lista-enlaces">
+            <li>
+                <strong>Video demostrativo del proyecto:</strong>
+                <a href= "https://drive.google.com/file/d/163hzgfLvK4JP58dqNcpzTzMCZ-JWH4xD/view?usp=drive_link" target="_blank">Ver Video</a>
+            </li>
+            <li>
+                <strong>Artículo sobre ahorro de agua y tecnología:</strong>
+                <a href="https://es.wikipedia.org/wiki/Internet_de_las_cosas" target="_blank">
+                    Leer más sobre IoT
+                </a>
+            </li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    &copy; 2025 - Proyecto académico de demostración | Desarrollado por Erick Andrango
+
+</body>
+</html>
